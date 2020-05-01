@@ -6,6 +6,7 @@ use App\DTO\HotelDTO;
 use App\Repository\HotelRepository;
 use App\Transformer\HotelTransformer;
 use App\Transformer\CategorieTransformer;
+use App\Transformer\ChambreTransformer;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\QueryException;
 use Exception;
@@ -39,10 +40,16 @@ class HotelService {
         return $hotelsDTOs;
     }
 
-    public function findAllCategoriesByHotel($hotel){
-        $categories = $this->hotelRepository->findAllCategoriesByHotel($hotel);
+    public function findAllCategoriesByHotel($id){
+        $categories = $this->hotelRepository->findAllCategoriesByHotel($id);
         $categoriesDTOs = CategorieTransformer::transformToListOfDTOS($categories);
         return $categoriesDTOs;
+    }
+
+    public function findAllAvailableRoomsByCategorieFromHotel($id,$idCategorie,$dateDebut,$dateFin){
+        $chambres = $this->hotelRepository->findAllAvailableRoomsByCategorieFromHotel($id,$idCategorie,$dateDebut,$dateFin);
+        $chambresDTOs = ChambreTransformer::transformToListOfDTOS($chambres);
+        return $chambresDTOs;
     }
 
     public function addNewHotel(HotelDTO $hotelDTO){

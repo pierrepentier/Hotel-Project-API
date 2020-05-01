@@ -34,6 +34,11 @@ class Chambre{
      */
     private $categorie;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Reservation", mappedBy="chambre")
+     */
+    private $reservations;
+
 
     public function getId(): ?int
     {

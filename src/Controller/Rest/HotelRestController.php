@@ -29,7 +29,8 @@ class HotelRestController extends AbstractFOSRestController {
     const SINGLE_HOTEL_URI = "/hotels/{id}";
     const HOTELS_BY_VILLE_URI = "/hotels/ville/{ville}"; 
     const HOTELS_BY_PAYS_URI = "/hotels/pays/{pays}"; 
-    const ALL_CATEGORIES_BY_HOTEL_URI = "/hotels/{hotel}/categories";
+    const ALL_CATEGORIES_BY_HOTEL_URI = "/hotels/{id}/categories";
+    const ALL_AVAILABLE_ROOMS_BY_DATES_URI = "/hotels/{id}/categories/{idCategorie}/{dateDebut}/{dateFin}";
 
     public function __construct(HotelService $hotelService, EntityManagerInterface $manager, HotelRepository $hotelRepository)
     {
@@ -81,18 +82,35 @@ class HotelRestController extends AbstractFOSRestController {
     }
 
     /**
-     * Look for hotels by ville in database
+     * Look for all categories by hotel in database
      * @Get(HotelRestController::ALL_CATEGORIES_BY_HOTEL_URI)
      * @param HotelRepository $hotelRepository
      * @return Response
      */
-    public function findAllCategoriesByHotel($hotel){
-        $categories = $this->hotelService->findAllCategoriesByHotel($hotel);
+    public function findAllCategoriesByHotel($id){
+        $categories = $this->hotelService->findAllCategoriesByHotel($id);
         if(empty($categories)){
             return View::create(null, Response::HTTP_NO_CONTENT);
         }
         return View::create($categories, Response::HTTP_OK);
+    
+    
     }
+    /**
+     * Look for Available rooms by categorie in database
+     * @Get(HotelRestController::ALL_AVAILABLE_ROOMS_BY_DATES_URI)
+     * @param HotelRepository $hotelRepository
+     * @return Response
+     */
+    public function findAllAvailableRoomsByCategorieFromHotel($id,$idCategorie,$dateDebut,$dateFin){
+        $chambres = $this->hotelService->findAllAvailableRoomsByCategorieFromHotel($id,$idCategorie,$dateDebut,$dateFin);
+        if(empty($chambres)){
+            return View::create(null, Response::HTTP_NO_CONTENT);
+        }
+        return View::create($chambres, Response::HTTP_OK);
+    }
+
+
 
     /**
      * Create a new hotel in database
